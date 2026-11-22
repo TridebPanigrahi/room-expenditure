@@ -1,0 +1,98 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+.expo/
+coverage/
+.DS_Store
+
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build files
+dist/
+build/
+coverage/
+
+# Expo
+.expo/
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.save
+*.log
+
+# IDE
+.vscode/
+
+# Prisma AI-generated agent skills
+apps/api/.agents/
+apps/api/skills-lock.json
+apps/api/.claude/
+apps/api/.windsurf/
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build files
+dist/
+build/
+coverage/
+
+# Expo
+.expo/
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.save
+*.log
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+coverage/
+
+# Expo
+.expo/
+web-build/
+
+# Prisma generated agent files
+apps/api/.agents/
+apps/api/skills-lock.json
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.save
+*.log
+
+# IDE
+.vscode/
+
+# Optional AI agent instructions
+# apps/mobile/AGENTS.md

@@ -1,13 +1,120 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum RoomRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum ExpenseType {
+  PERSONAL
+  SHARED
+}
+
+enum ExpenseCategory {
+  RENT
+  GROCERIES
+  FOOD
+  ELECTRICITY
+  WATER
+  INTERNET
+  TRANSPORT
+  SHOPPING
+  MEDICAL
+  OTHER
+}
+
+enum SplitType {
+  EQUAL
+  CUSTOM
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  memberships RoomMember[]
+  expenses    Expense[] @relation("ExpensePayer")
+  shares      ExpenseShare[]
+  sessions    RefreshSession[]
+}
+
+model Room {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  createdAt DateTime @default(now())
+
+  members  RoomMember[]
+  expenses Expense[]
+}
+
+model RoomMember {
+  id       String   @id @default(uuid()) @db.Uuid
+  userId   String   @db.Uuid
+  roomId   String   @db.Uuid
+  role     RoomRole @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@unique([userId, roomId])
+}
+
+model Expense {
+  id          String          @id @default(uuid()) @db.Uuid
+  title       String
+  amountPaise Int
+  type        ExpenseType
+  category    ExpenseCategory
+  splitType   SplitType?
+  date        DateTime
+  paidBy      String          @db.Uuid
+  roomId      String?         @db.Uuid
+  createdAt   DateTime        @default(now())
+
+  payer  User @relation("ExpensePayer", fields: [paidBy], references: [id])
+  room   Room? @relation(fields: [roomId], references: [id])
+  shares ExpenseShare[]
+}
+
+model ExpenseShare {
+  id         String @id @default(uuid()) @db.Uuid
+  expenseId  String @db.Uuid
+  userId     String @db.Uuid
+  sharePaise Int
+
+  expense Expense @relation(fields: [expenseId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([expenseId, userId])
+}
+
+
+model RefreshSession {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@index([userId])
 }

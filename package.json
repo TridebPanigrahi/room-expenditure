@@ -1,4 +1,3 @@
-
 {
   "name": "room-expenditure",
   "version": "1.0.0",
@@ -11,5 +10,8 @@
     "dev:web": "npm run dev --workspace=@room-expenditure/web",
     "dev:api": "npm run dev --workspace=@room-expenditure/api",
     "dev:mobile": "npm run start --workspace=@room-expenditure/mobile"
+  },
+  "devDependencies": {
+    "dotenv": "^18.0.10"
   }
 }
